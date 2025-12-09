@@ -26,7 +26,7 @@ The book is intended for students, researchers, hobbyists, and professionals in 
 - **AI/RAG**: OpenAI Agent SDK
 - **Database**: Neon Postgres (User Profiles, Logs)
 - **Vector Store**: Qdrant
-- **Authentication**: BetterAuth
+- **Authentication**: Auth0
 - **Deployment**: Vercel
 
 ## Clarifications

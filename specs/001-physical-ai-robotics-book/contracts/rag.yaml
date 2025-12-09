@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot API
+  version: 1.0.0
+  description: API for interacting with the RAG chatbot.
+servers:
+  - url: /api/v1
+paths:
+  /rag/query:
+    post:
+      summary: Query the RAG chatbot
+      operationId: ragChatbotQuery
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+                - mode
+              properties:
+                query:
+                  type: string
+                  description: The user's question for the chatbot.
+                mode:
+                  type: string
+                  enum: [ "full-book", "selected-text" ]
+                  description: Mode of the query (full book context or selected text context).
+                selected_text:
+                  type: string
+                  nullable: true
+                  description: Optional. The text selected by the user for 'selected-text' mode.
+      responses:
+        '200':
+          description: Chatbot response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: The chatbot's answer.
+                  source_chapter:
+                    type: string
+                    nullable: true
+                    description: The chapter title from which the answer was sourced.
+                  source_url:
+                    type: string
+                    nullable: true
+                    description: URL to the source content in the book.
+        '400':
+          description: Invalid input or missing selected_text for 'selected-text' mode
+        '401':
+          description: Unauthorized (if authentication is required)
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
