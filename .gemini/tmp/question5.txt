@@ -1,0 +1,15 @@
+## Question 5: User Background Impact
+
+**Context**: The signup process asks for the user's background (e.g., student, professional), but the spec doesn't define how this information will be used.
+
+**What we need to know**: How should the user's background influence their experience?
+
+**Recommended:** Option A - For the initial version, keeping it simple is best. The data can be collected for future use without adding complexity to the initial build.
+
+| Option | Description |
+|---|---|
+| A | **Analytics Only**: For now, collect the information for analytics. It will not affect the user experience. |
+| B | **Personalized Suggestions**: The chatbot could suggest different "learning paths" or starting chapters based on background. |
+| C | **Content Adaptation**: The book could show/hide certain advanced sections based on the user's declared background. |
+
+You can reply with the option letter (e.g., "A"), accept the recommendation by saying "yes" or "recommended", or provide your own short answer.

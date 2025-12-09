@@ -1,0 +1,11 @@
+## Question 4: Author and Repository Information
+
+**Context**: The specification's frontmatter currently has placeholder values for `authors` and `repo`.
+
+**What we need to know**: Please provide the list of authors and the URL for the GitHub repository to complete the frontmatter.
+
+**Suggested:**
+- **Authors**: `["The Ummah","Gemini"]`
+- **Repo**: `https://github.com/The-Ummah/physical-ai-humanoid-robotics-book`
+
+You can accept the suggestion by saying "yes" or "suggested", or provide your own answer for both authors and repo.
