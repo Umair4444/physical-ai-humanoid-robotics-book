@@ -1,69 +1,80 @@
-# Data Model
+# Data Model: Physical AI & Humanoid Robotics Book
 
-This document outlines the key entities, their attributes, relationships, and validation rules based on the feature specification.
+**Date**: 2025-12-09
+**Input**: `specs/001-physical-ai-robotics-book/spec.md`, `.specify/memory/constitution.md`
 
-## 1. User Profile
+## 1. Overview
 
-Represents a registered user in the system. Stored in Neon PostgreSQL.
+This document defines the key entities and their relationships for the "Physical AI & Humanoid Robotics Book" project. It consolidates information from the feature specification (`spec.md`) and the project constitution (`constitution.md`) to establish a clear data model.
 
--   **Entity**: `User`
--   **Table Name**: `users`
--   **Attributes**:
-    -   `user_id` (UUID, Primary Key): Unique identifier for the user.
-    -   `auth_provider_id` (String, Unique): ID from the authentication provider (Auth0).
-    -   `email` (String, Unique): User's email address.
-    -   `profile_data` (JSONB): A JSON object containing additional user-specific details.
--   **`profile_data` Structure**:
-    -   `background_sw` (String): User's software background (e.g., "Student", "Professional", "Beginner", "Intermediate", "Advanced").
-    -   `background_hw` (String): User's hardware background (e.g., "Student", "Professional", "Beginner", "Intermediate", "Advanced").
-    -   `preferences` (JSONB): A JSON object for personalization settings.
-        -   `translation_language` (String, default: "en"): Currently supports "en" (English) and "ur" (Urdu).
-        -   `chapter_order` (Array of Strings): Ordered list of chapter IDs for personalized display.
-        -   `hidden_chapters` (Array of Strings): List of chapter IDs the user wishes to hide.
-        -   `highlighted_chapters` (Array of Strings): List of chapter IDs the user wishes to highlight.
--   **Relationships**: One-to-many with `RAGLog` (a user can have many RAG interactions).
+## 2. Key Entities
+
+### 2.1 User Profile
+
+Represents a registered user of the system.
+
+-   **Description**: Stores user identification, authentication provider link, and personalization settings.
+-   **Source**: `spec.md` (Key Entities), `constitution.md` (Minimal Schema Rules)
+-   **Fields**:
+    *   `user_id` (UUID, Primary Key): Unique identifier for the user.
+    *   `auth_provider_id` (String): Identifier from the BetterAuth provider.
+    *   `full_name` (String, Optional): User's full name.
+    *   `email` (String, Unique): User's email address.
+    *   `registration_date` (DateTime): Timestamp of user registration.
+    *   `last_login_date` (DateTime): Timestamp of the user's last login.
+    *   `profile_data` (JSONB): A JSON object containing additional profile information.
+        *   `background_sw` (String): User's software background (e.g., "student", "professional").
+        *   `background_hw` (String): User's hardware background (e.g., "beginner", "expert").
+        *   `preferences` (JSONB): User's personalization preferences (e.g., `{"translation_language": "Urdu", "chapter_order": [...]}`).
+-   **Relationships**: Linked to `RAG Log` (one-to-many).
 -   **Validation Rules**:
-    -   `email` must be a valid email format.
-    -   `background_sw` and `background_hw` must be from a predefined set of values.
-    -   `translation_language` must be "en" or "ur".
+    *   `email` must be a valid email format.
+    *   `auth_provider_id` must be present for authenticated users.
 
-## 2. RAG Log
+### 2.2 RAG Log
 
-Records user interactions with the RAG chatbot. Stored in Neon PostgreSQL.
+Records user interactions with the RAG chatbot.
 
--   **Entity**: `RAGLog`
--   **Table Name**: `rag_logs`
--   **Attributes**:
-    -   `log_id` (UUID, Primary Key): Unique identifier for the log entry.
-    -   `user_id` (UUID, Foreign Key, Nullable): References `User.user_id`. Null if the user is not signed in.
-    -   `query_text` (Text): The question asked by the user.
-    -   `response_text` (Text): The answer provided by the chatbot.
-    -   `query_mode` (String): "full-book" or "selected-text".
-    -   `source_chapter` (String, Nullable): Chapter from which the response was primarily sourced.
-    -   `source_url` (String, Nullable): URL to the source section in the book.
-    -   `timestamp` (Timestamp with timezone): When the interaction occurred.
--   **Relationships**: Many-to-one with `User` (many logs can belong to one user).
--   **Validation Rules**:
-    -   `query_mode` must be "full-book" or "selected-text".
-    -   `query_text` and `response_text` cannot be empty.
+-   **Description**: Stores the user's query, the chatbot's response, and a reference to the user if logged in.
+-   **Source**: `spec.md` (Key Entities)
+-   **Fields**:
+    *   `log_id` (UUID, Primary Key): Unique identifier for the log entry.
+    *   `user_id` (UUID, Foreign Key, Optional): References `User Profile.user_id` if the user is signed in.
+    *   `query_text` (Text): The question asked by the user.
+    *   `response_text` (Text): The answer provided by the chatbot.
+    *   `source_chapter` (String, Optional): Reference to the chapter(s) used for the response.
+    *   `source_url` (String, Optional): URL to the relevant section in the book.
+    *   `timestamp` (DateTime): Timestamp of the query/response.
+    *   `mode` (String): "full-book" or "selected-text".
+-   **Relationships**: Many-to-one with `User Profile`.
 
-## 3. Chapter Content Vector
+### 2.3 Chapter Vector
 
-Represents vectorized chunks of the book's content for RAG. Stored in Qdrant.
+Vectorized representation of book content for semantic search.
 
--   **Entity**: `ChapterContentVector`
--   **Collection Name**: `book_chapters` (in Qdrant)
--   **Attributes (Payload in Qdrant)**:
-    -   `id` (String): Unique identifier for the text chunk (e.g., `module-chapter-chunk_index`).
-    -   `vector` (Vector): The numerical embedding of the text chunk.
-    -   `content` (Text): The raw text of the chunk.
-    -   `module` (String): The module the chunk belongs to (e.g., "Module 1").
-    -   `chapter_title` (String): The title of the chapter.
-    -   `chapter_id` (String): Unique identifier for the chapter (e.g., "1.1").
-    -   `url` (String): Relative URL to the specific section or chapter in Docusaurus.
-    -   `last_updated` (Timestamp with timezone): When the vector was last generated/updated.
--   **Relationships**: None directly within Qdrant, but logically linked to the Docusaurus book content.
--   **Validation Rules**:
-    -   `vector` must be of a consistent dimension.
-    -   `content`, `module`, `chapter_title`, `chapter_id`, `url` cannot be empty.
-    -   `id` must be unique.
+-   **Description**: Stores embedding vectors of text chunks from the book, used by Qdrant for RAG.
+-   **Source**: `spec.md` (Key Entities)
+-   **Fields**:
+    *   `vector_id` (UUID, Primary Key, Qdrant internal): Unique identifier for the vector.
+    *   `chapter_id` (String): Identifier for the chapter (e.g., "module-1-chapter-1-1").
+    *   `text_chunk` (Text): The original text segment that was vectorized.
+    *   `embedding` (Vector): The numerical vector representation of `text_chunk`.
+    *   `metadata` (JSONB, Optional): Additional metadata like section, page number, etc.
+-   **Storage**: Qdrant (vector store).
+-   **Validation Rules**: PII must be explicitly excluded from vectorization (`constitution.md`).
+
+## 3. Relationships
+
+-   **User Profile to RAG Log**: One `User Profile` can have many `RAG Log` entries. An `RAG Log` entry can optionally belong to one `User Profile`.
+
+## 4. Storage Locations
+
+-   **User Profile, RAG Log**: Neon Postgres
+-   **Chapter Vector**: Qdrant
+
+## 5. Potential State Transitions (User Profile)
+
+-   **Unregistered User** -> **Registered User**: Via signup process.
+-   **Registered User** -> **Logged In User**: Via sign-in process.
+-   **Logged In User** -> **Logged Out User**: Via sign-out action.
+-   **User Profile Update**: Changes to `full_name`, `email`, `background_sw`, `background_hw`, `preferences`.

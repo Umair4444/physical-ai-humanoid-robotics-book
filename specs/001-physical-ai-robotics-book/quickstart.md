@@ -1,22 +1,27 @@
-# Quickstart Guide
+# Quickstart Guide: Physical AI & Humanoid Robotics Book
 
-This guide provides instructions to quickly set up and run the "Physical AI & Humanoid Robotics" book project locally.
+**Date**: 2025-12-09
+**Input**: `specs/001-physical-ai-robotics-book/spec.md`, `specs/001-physical-ai-robotics-book/plan.md`, `.specify/memory/constitution.md`
 
-## Prerequisites
+## 1. Introduction
 
-Ensure you have the following installed on your system:
+This guide provides a quick overview of how to set up and run the "Physical AI & Humanoid Robotics Book" project locally. The project consists of a Docusaurus-based frontend for the book content and a FastAPI backend for the RAG chatbot and user management.
+
+## 2. Prerequisites
+
+Ensure you have the following software installed on your system:
 
 -   **Git**: For cloning the repository.
--   **Python 3.9+**: For the FastAPI backend.
--   **Node.js (LTS recommended)**: For the Docusaurus frontend.
--   **npm** or **Yarn**: Node.js package manager (npm comes with Node.js).
--   **Docker** (Optional, for local Qdrant instance): If you don't use a hosted Qdrant service.
--   **Auth0 Account**: For user authentication.
--   **Neon PostgreSQL Account**: For the database.
--   **OpenAI API Key**: For the OpenAI Agent SDK.
--   **Qdrant Instance**: Either a hosted service or a local Docker container.
+-   **Python 3.11+**: For the FastAPI backend.
+-   **uv**: A fast Python package installer and resolver.
+    ```bash
+    pip install uv
+    ```
+-   **Node.js LTS**: For the Docusaurus frontend. We recommend using `nvm` (Node Version Manager) to manage Node.js versions.
 
-## 1. Clone the Repository
+## 3. Getting Started
+
+### 3.1 Clone the Repository
 
 First, clone the project repository from GitHub:
 
@@ -25,88 +30,41 @@ git clone https://github.com/The-Ummah/physical-ai-humanoid-robotics-book.git
 cd physical-ai-humanoid-robotics-book
 ```
 
-## 2. Environment Setup
+### 3.2 Backend Setup (FastAPI)
 
-Create a `.env` file in the root of the project for environment variables. This file should NOT be committed to version control.
-
-```
-# Auth0 Configuration
-AUTH0_DOMAIN=your_auth0_domain.auth0.com
-AUTH0_API_AUDIENCE=your_auth0_api_audience
-AUTH0_CLIENT_ID=your_auth0_client_id
-AUTH0_CLIENT_SECRET=your_auth0_client_secret
-AUTH0_CALLBACK_URL=http://localhost:3000/callback
-
-# Neon PostgreSQL Configuration
-DATABASE_URL="postgresql://user:password@host:port/database"
-
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key
-
-# Qdrant Configuration
-QDRANT_HOST=localhost
-QDRANT_PORT=6333
-QDRANT_API_KEY=your_qdrant_api_key (if using a hosted Qdrant)
-QDRANT_COLLECTION_NAME=book_chapters
-```
-
-Replace the placeholder values with your actual credentials.
-
-## 3. Backend Setup (FastAPI)
-
-Navigate to the `backend` directory, create a Python virtual environment, install dependencies, and apply database migrations.
+Navigate to the `backend` directory, install dependencies using `uv`, and run the application:
 
 ```bash
 cd backend
-python -m venv venv
-./venv/Scripts/activate  # On Windows
-# source venv/bin/activate # On Linux/macOS
-
-pip install -r requirements.txt
-# If using SQLModel for migrations, typically:
-# alembic upgrade head
+uv sync
+uv run app.py  # Or appropriate entry point for FastAPI
 ```
 
-## 4. Run the Backend (FastAPI)
+### 3.3 Frontend Setup (Docusaurus)
 
-Start the FastAPI application.
+Open a new terminal, navigate to the `frontend` directory, install dependencies, and start the Docusaurus development server:
 
 ```bash
-uvicorn main:app --reload --port 8000
+cd frontend
+npm install
+npm start
 ```
 
-The backend API will be available at `http://localhost:8000`.
+The Docusaurus book should now be accessible in your browser, typically at `http://localhost:3000`.
 
-## 5. Frontend Setup (Docusaurus)
+## 4. Environment Variables
 
-Open a new terminal, navigate to the `frontend` directory, and install Node.js dependencies.
+Both the frontend and backend require environment variables for configuration (e.g., API keys, database connection strings). Refer to the `.env.example` files in both the `frontend/` and `backend/` directories for a list of required variables.
 
-```bash
-cd ../frontend
-npm install # or yarn install
-```
+**Important**: Never commit your `.env` files to Git.
 
-## 6. Run the Frontend (Docusaurus)
+## 5. Contributing
 
-Start the Docusaurus development server.
+This project adheres to strict contribution guidelines outlined in the [Project Constitution](/.specify/memory/constitution.md). Key points include:
 
-```bash
-npm start # or yarn start
-```
+-   **Branch Naming**: All branches MUST follow conventions like `feature/[description]`.
+-   **Commits**: Adhere to the Conventional Commits specification.
+-   **Pull Requests (PRs)**: All changes to `main` MUST go through a PR and require at least one approving review.
+-   **Mandatory Push Rule**: After every logical unit of work, especially after creating a Prompt History Record (PHR) or completing a feature task, the full repository state MUST be committed and pushed to its feature branch.
 
-The Docusaurus book will be available at `http://localhost:3000`.
-
-## 7. Vectorize Book Content (for RAG)
-
-Before using the RAG chatbot, you need to vectorize the book content and upload it to Qdrant. This usually involves a separate script.
-
-```bash
-# Example (actual script name/location may vary)
-python scripts/vectorize_content.py
-```
-
-Ensure your Qdrant instance is running and accessible (e.g., via Docker: `docker run -p 6333:6333 qdrant/qdrant`).
-
----
-
-**Note**: Refer to the `README.md` in both `backend/` and `frontend/` directories for more detailed, project-specific setup and development instructions.
+Please review the full [Project Constitution](/.specify/memory/constitution.md) for detailed guidelines before contributing.

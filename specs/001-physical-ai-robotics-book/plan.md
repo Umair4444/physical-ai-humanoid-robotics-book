@@ -1,67 +1,46 @@
 # Implementation Plan: Physical AI & Humanoid Robotics Book
 
-**Branch**: `gemini-plan-robotics-book-20251209` | **Date**: 2025-12-09 | **Spec**: D:\1.GITHUB\physical-ai-humanoid-robotics-book\specs\001-physical-ai-robotics-book\spec.md
+**Branch**: `001-physical-ai-robotics-book` | **Date**: 2025-12-09 | **Spec**: specs/001-physical-ai-robotics-book/spec.md
 **Input**: Feature specification from `/specs/001-physical-ai-robotics-book/spec.md`
 
 **Note**: This template is filled in by the `/sp.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-To create a comprehensive, interactive online book titled "Physical AI & Humanoid Robotics" using Docusaurus. The book will serve as a definitive guide from beginner to professional levels and will include an integrated RAG (Retrieval-Augmented Generation) chatbot to answer user questions based on the book's content. The frontend will use Docusaurus and TypeScript, the backend will use FastAPI with Python and OpenAI-Agent SDK, authentication will be handled by BetterAuth, with Neon PostgreSQL for the database. Deployment will target Vercel, with GitHub Pages as a secondary option, and reusable frontend components will be utilized.
+To create a comprehensive, interactive online book titled "Physical AI & Humanoid Robotics" using Docusaurus (frontend) and FastAPI (backend). The book will feature a RAG chatbot for interactive queries, user personalization via BetterAuth and Neon Postgres, and content vectorization with Qdrant. The system is designed to support 1000 daily active users and 100 concurrent users, with robust error handling and comprehensive observability. Initial ambiguities have been clarified, allowing for a focused implementation phase.
 
 ## Technical Context
 
-**Language/Version**: Python 3.x (for FastAPI Backend), TypeScript (for Docusaurus Frontend)
-**Primary Dependencies**: Docusaurus, FastAPI, OpenAI-Agent SDK, Auth0, Neon PostgreSQL client, Qdrant client
-**Storage**: Neon PostgreSQL (User Profiles, Logs), Qdrant (Vector Store for book content)
-**Testing**: pytest (FastAPI Unit/Integration), httpx (FastAPI API testing), pytest-asyncio (FastAPI async), Jest (Docusaurus Unit), React Testing Library (Docusaurus Unit), Playwright (Docusaurus E2E)
-**Target Platform**: Web (Vercel, GitHub Pages)
-**Project Type**: Web application (frontend + backend)
-**Performance Goals**: RAG chatbot response under 3 seconds (SC-002 from spec.md)
-**Constraints**:
-- Graceful degradation if BetterAuth is unavailable (Edge Case from spec.md)
-- Daily RAG chatbot knowledge base update (FR-001 from spec.md)
-- No secrets or API keys hardcoded (Constitution)
-**Scale/Scope**: 10k users (assumption), 5 modules, 25 chapters (Book Structure from spec.md)
+**Language/Version**: Python 3.11 (for Backend), JavaScript/TypeScript (for Frontend with Docusaurus)
+**Primary Dependencies**: Docusaurus, FastAPI, OpenAI Agent SDK, Neon Postgres, Qdrant, BetterAuth
+**Storage**: Neon Postgres (User Profiles, Logs), Qdrant (Vector Store)
+**Testing**: Pytest (for Backend), Jest/React Testing Library (for Frontend), Playwright/Cypress (for E2E)
+**Target Platform**: Vercel (Web/Serverless Functions)
+**Project Type**: web + backend
+**Performance Goals**: RAG chatbot responds to 95% of in-domain queries in under 3 seconds. Support for 1000 daily active users and 100 concurrent users.
+**Constraints**: Implement retry mechanisms with exponential backoff and circuit breakers for critical external services. Detailed application metrics, structured logging, and distributed tracing for all external integrations.
+**Scale/Scope**: 5 modules, 25 chapters. 1000 daily active users, 100 concurrent users.
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-**Repository Rules:**
-- Branch Names: Current branch `gemini-plan-robotics-book-20251209` and feature branch `001-physical-ai-robotics-book` (from spec.md) deviate from the `feature/[description]` convention. *Deviation noted, but acceptable for a planning branch/initial feature branch.*
-- Commits: All commits MUST adhere to the Conventional Commits specification. *Acknowledged, will be enforced.*
-- Pull Requests (PRs): All changes to `main` MUST go through a PR. *Acknowledged, will be enforced.*
+- **Branch Naming**: The current feature branch `001-physical-ai-robotics-book` deviates slightly from `feature/[description]`. (STATUS: VIOLATION - Awaiting refactor to align with 'feature/[description]' pattern)
+- **Conventional Commits**: Adherence will be enforced during implementation. (STATUS: CLEAR)
+- **PRs/Branch Protection**: Implied and will be enforced. (STATUS: CLEAR)
+- **CI Checks**: Assumed as part of modern deployment practices via Vercel. (STATUS: CLEAR)
+- **Secrets Management**: Spec explicitly states environment variables. (STATUS: CLEAR)
+- **Spec Location/Header**: Adhered to. (STATUS: CLEAR)
+- **RAG Chatbot Provenance**: Will be enforced during implementation. (STATUS: PARTIAL VIOLATION - Justified for implementation detail)
+- **PII Exclusion (Vectorization/Logging)**: Will be enforced during implementation. (STATUS: PARTIAL VIOLATION - Justified for implementation detail)
+- **Privacy & Security (Encryption, Data Deletion, Incident Policy)**: Will be enforced during implementation. (STATUS: PARTIAL VIOLATION - Justified for implementation detail)
+- **Testing (Unit/Integration/E2E)**: Explicitly covered in Technical Context. (STATUS: CLEAR)
+- **Accessibility (a11y)**: Will be enforced during implementation to WCAG 2.1 AA standards. (STATUS: PARTIAL VIOLATION - Justified for implementation detail)
+- **Monitoring**: Explicitly covered in Technical Context and NFRs. (STATUS: CLEAR)
+- **Semantic Versioning/Changelog/Tagging**: Will be enforced during implementation. (STATUS: CLEAR)
+- **Third-Party Dependencies/Licenses**: Will be enforced during implementation. (STATUS: CLEAR)
 
-**CI/CD & Deployment:**
-- CI Checks: All PRs MUST pass automated checks. *Acknowledged, will be configured.*
-- Deployment: The `main` branch is automatically deployed to GitHub Pages or Vercel. *Aligns with user's requested deployment targets.*
-- Secrets: No secrets or API keys shall ever be hardcoded. *Acknowledged, will be enforced.*
-
-**RAG Chatbot Rules (aligned with spec.md):**
-- Modes: Full-Book and Selected-Text modes supported. *Aligned.*
-- Provenance: Answers MUST cite sources. *Aligned.*
-- Vectorization: Content vectorized in Qdrant, PII excluded. *Aligned.*
-- Logging: Queries/responses logged to Neon Postgres, PII scrubbed. *Aligned.*
-
-**Authentication & Personalization (aligned with spec.md):**
-- Signup: Background info requested. *Aligned.*
-- Profile Storage: User profiles in Neon Postgres. *Aligned.*
-- Personalization: Reorder, hide, highlight chapters. *Aligned.*
-- Translation: Urdu translation. *Aligned.*
-- Minimal Schema Rules: `users` table, `profile_data` (JSONB) with `background_sw`, `background_hw`, `preferences`. *Aligned.*
-
-**Privacy & Security:**
-- Data Handling, Retention, Incident Policy. *Acknowledged, will be addressed.*
-
-**Testing & Observability:**
-- Unit, Integration, E2E tests, Accessibility (a11y), Monitoring. *Acknowledged, will be addressed in tasks.*
-
-**Contribution & Code of Conduct:**
-- Issues, PR Etiquette, Formatting, Conduct. *Acknowledged, will be enforced.*
-
-**Releases:**
-- Versioning (SemVer), Changelog, Tagging. *Acknowledged, will be enforced.*
+All identified partial violations are related to implementation details that will be enforced as part of the development process and do not block the planning phase.
 
 ## Project Structure
 
@@ -79,6 +58,7 @@ specs/001-physical-ai-robotics-book/
 
 ### Source Code (repository root)
 
+```text
 backend/
 ├── src/
 │   ├── models/
@@ -92,13 +72,6 @@ frontend/
 │   ├── pages/
 │   └── services/
 └── tests/
+```
 
-**Structure Decision**: The project will utilize a "frontend" and "backend" directory structure at the root, reflecting the distinct Docusaurus and FastAPI components.
-
-## Complexity Tracking
-
-> **Fill ONLY if Constitution Check has violations that must be justified**
-
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|-------------------------------------|
-| Branch Naming Convention (for feature branch) | Initial deviation from convention for planning phase, will adhere to `feature/[description]` for future feature branches. | N/A |
+**Structure Decision**: The project will adopt a `web + backend` structure, with separate directories for `backend` (FastAPI) and `frontend` (Docusaurus) components. This separation facilitates independent development, testing, and deployment of the two primary application layers.

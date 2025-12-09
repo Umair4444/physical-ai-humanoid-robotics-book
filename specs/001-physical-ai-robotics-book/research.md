@@ -1,73 +1,63 @@
-# Research Notes
+# Research Notes: Physical AI & Humanoid Robotics Book
 
-This document contains research findings to address "NEEDS CLARIFICATION" points and establish best practices for the project.
+**Date**: 2025-12-09
+**Input**: `specs/001-physical-ai-robotics-book/spec.md`, `specs/001-physical-ai-robotics-book/plan.md`
 
-## 1. BetterAuth Clarification
+## Overview
 
-**Decision**: "BetterAuth" is a generic placeholder. The project will leverage **Auth0** for authentication, as it provides a robust, scalable, and widely-adopted solution that supports various integration methods suitable for both Docusaurus (frontend) and FastAPI (backend). It offers features like social logins, multi-factor authentication, and user management, aligning with the project's personalization and user profile requirements.
+This `research.md` file documents the confirmed technology choices and design rationales for the "Physical AI & Humanoid Robotics Book" project. Based on the comprehensive `spec.md` and `plan.md`, no ambiguities or "NEEDS CLARIFICATION" items were found in the initial technical context. This document serves to consolidate the reasoning behind key architectural decisions.
 
-**Rationale**: Auth0 simplifies authentication implementation, reducing development time and security risks associated with building custom authentication systems. Its SDKs are well-maintained, and it integrates seamlessly with modern web frameworks.
+## 1. Technology Stack Decisions
 
-**Alternatives Considered**:
-- **Keycloak**: Open-source, powerful, but requires self-hosting and more complex management.
-- **Firebase Authentication**: Good for simpler applications, but Auth0 offers more enterprise-grade features and flexibility for future scaling.
-- **Custom OAuth/JWT**: High development effort, increased security risks, and ongoing maintenance burden.
+### 1.1 Frontend/Book: Docusaurus
+- **Decision**: Docusaurus
+- **Rationale**: Chosen for its suitability in building documentation websites, its Markdown-first approach, ease of customization, and strong community support. Aligns with the project goal of creating a "comprehensive, interactive online book".
+- **Alternatives Considered**: Next.js, Gatsby (Docusaurus offers a more tailored solution for book-like content).
 
-## 2. Best Practices for Docusaurus with TypeScript and Reusable Components
+### 1.2 Backend API: FastAPI (Python)
+- **Decision**: FastAPI
+- **Rationale**: Selected for its high performance, ease of use for building APIs with Python, automatic interactive API documentation (Swagger UI/ReDoc), and strong type hinting support. Ideal for the RAG chatbot and user management backend.
+- **Alternatives Considered**: Flask, Django (FastAPI provides a modern, high-performance solution with built-in API features).
 
-**Decision**:
-- **Setup**: Initialize Docusaurus with the official TypeScript template.
-- **Project Structure**: Organize Docusaurus content (docs, blog, pages) in their respective directories. For custom React components, create a `src/components` directory within the Docusaurus project.
-- **Styling**: Utilize Docusaurus's built-in theming capabilities, CSS modules, or Tailwind CSS for component styling to ensure consistency and maintainability.
-- **Reusable Components**: Develop shared UI components (e.g., buttons, cards, specific chapter elements) as React components in TypeScript. These components will be importable and usable across various Docusaurus pages and MDX content.
-- **Context7 Integration**: Docusaurus offers methods to extend markdown rendering. We will explore using MDX components or custom plugins to render Context7 documentation patterns.
+### 1.3 AI/RAG Integration: OpenAI Agent SDK
+- **Decision**: OpenAI Agent SDK
+- **Rationale**: The project explicitly requires an integrated RAG chatbot. The OpenAI Agent SDK provides a robust framework for building AI agents, integrating with large language models, and managing tools for RAG.
+- **Alternatives Considered**: LangChain (OpenAI Agent SDK is a direct fit for OpenAI's ecosystem).
 
-**Rationale**: Following standard Docusaurus and React/TypeScript practices ensures maintainability, scalability, and leverages the strengths of the ecosystem. Reusable components promote consistency and accelerate development.
+### 1.4 Database: Neon Postgres
+- **Decision**: Neon Postgres
+- **Rationale**: Chosen for its serverless capabilities, auto-scaling, and compatibility with standard PostgreSQL. This offers a cost-effective and scalable solution for user profiles and logging data.
+- **Alternatives Considered**: Supabase, traditional PostgreSQL hosting (Neon's serverless nature is a strong advantage for the target deployment environment).
 
-## 3. Best Practices for FastAPI with OpenAI-Agent SDK Integration
+### 1.5 Vector Store: Qdrant
+- **Decision**: Qdrant
+- **Rationale**: Selected as the vector database for storing vectorized book content. Qdrant is an open-source vector search engine known for its performance, scalability, and rich filtering capabilities, which are essential for efficient RAG operations.
+- **Alternatives Considered**: Pinecone, Milvus (Qdrant's performance and open-source nature were key factors).
 
-**Decision**:
-- **FastAPI Setup**: Use a standard FastAPI project structure with routing, dependency injection for services, and Pydantic for data validation.
-- **OpenAI-Agent SDK Integration**: Create a dedicated service layer within the FastAPI application to encapsulate all interactions with the OpenAI-Agent SDK. This service will handle agent initialization, tool registration (e.g., for RAG queries), and agent execution.
-- **RAG Implementation**: The RAG logic will involve:
-    1.  Pre-processing book content (Markdown to text chunks).
-    2.  Embedding text chunks using an OpenAI embedding model.
-    3.  Storing embeddings and metadata (chapter, section) in Qdrant.
-    4.  At query time, embedding the user query, performing a similarity search in Qdrant, retrieving top-k relevant chunks.
-    5.  Passing retrieved chunks as context to the OpenAI LLM via the Agent SDK.
-- **Qdrant Connection**: Manage the Qdrant client as a singleton or via FastAPI's dependency injection system for efficient connection pooling.
+### 1.6 Authentication: BetterAuth
+- **Decision**: BetterAuth
+- **Rationale**: Explicitly chosen by the user and confirmed to be the standard for user authentication and personalization. Provides necessary features for signup, sign-in, and managing user profiles.
+- **Alternatives Considered**: Auth0 (initially considered/mistakenly referenced, but BetterAuth is the confirmed choice).
 
-**Rationale**: Separating concerns makes the codebase modular and testable. Leveraging Pydantic for API contracts ensures robust data handling. The Agent SDK provides a structured way to build AI applications, and Qdrant is optimized for vector similarity search.
+### 1.7 Deployment: Vercel
+- **Decision**: Vercel
+- **Rationale**: Selected for its seamless deployment of both Docusaurus (frontend) and FastAPI (serverless functions), automatic scaling, and developer-friendly workflow, especially when integrated with GitHub.
+- **Alternatives Considered**: Netlify, GitHub Pages, AWS Amplify (Vercel offers a strong, integrated platform for this specific stack).
 
-## 4. Deployment Strategies for Docusaurus (Vercel/GitHub Pages) and FastAPI (Vercel Serverless)
+## 2. Best Practices & Design Patterns
 
-**Decision**:
-- **Primary Deployment (Vercel)**:
-    - **Docusaurus Frontend**: Deploy Docusaurus directly to Vercel. Vercel automatically detects Docusaurus projects and configures build settings. Continuous deployment will be set up from the GitHub repository.
-    - **FastAPI Backend**: Deploy FastAPI as serverless functions on Vercel. FastAPI endpoints will be served under the `/api` route. Vercel supports Python functions and handles scaling automatically.
-- **Secondary Deployment (GitHub Pages)**:
-    - **Docusaurus Frontend**: Configure GitHub Actions to build and deploy the Docusaurus site to GitHub Pages from the `main` branch. This will serve as a reliable backup or alternative for the static book content.
-    - **FastAPI Backend**: GitHub Pages does *not* support dynamic backend services. For a GitHub Pages deployment, the FastAPI backend would need to be deployed separately (e.g., on a different cloud provider or a dedicated server) and the Docusaurus frontend configured to point to that external API. *This will be noted as a significant architectural difference for GitHub Pages deployment.*
+### 2.1 Monorepo Structure (`backend/` and `frontend/`)
+- **Decision**: Adopt a `web + backend` monorepo structure.
+- **Rationale**: This separation allows for independent development, testing, and deployment of the Docusaurus frontend and FastAPI backend. It promotes clear separation of concerns and facilitates team collaboration.
 
-**Rationale**: Vercel offers a seamless developer experience with integrated frontend and backend deployment, automatic scaling, and custom domain support. GitHub Pages provides a free, simple hosting solution for static content, suitable as a secondary option for the book itself.
+### 2.2 Observability (Metrics, Logging, Tracing)
+- **Decision**: Implement detailed application metrics, structured logging, and distributed tracing.
+- **Rationale**: Essential for monitoring application health, diagnosing issues, understanding performance bottlenecks, and ensuring reliability as specified in NFR-003.
 
-## 5. Integration of Neon PostgreSQL with FastAPI
+### 2.3 Resilience (Retry Mechanisms, Circuit Breakers)
+- **Decision**: Implement retry mechanisms with exponential backoff and circuit breakers for critical external services.
+- **Rationale**: Directly addresses NFR-002, ensuring system reliability and graceful degradation when external dependencies (like OpenAI or Qdrant) experience transient failures or outages.
 
-**Decision**:
-- **ORM**: Use **SQLModel** (built on Pydantic and SQLAlchemy) for database interactions. SQLModel provides a type-safe way to define models and perform CRUD operations, integrating well with FastAPI's Pydantic models.
-- **Connection Management**: Utilize FastAPI's dependency injection for database sessions, ensuring that connections are properly managed and closed after each request.
-- **Neon-Specifics**: Configure SQLModel to connect to the Neon PostgreSQL instance using the provided connection string. Leverage Neon's branching capabilities for development/staging environments if needed.
+## 3. Unresolved Clarifications
 
-**Rationale**: SQLModel provides a modern, type-safe, and FastAPI-idiomatic approach to database access. Dependency injection ensures efficient and correct handling of database sessions. Neon offers a serverless PostgreSQL experience with good scalability and branching features.
-
-## 6. Recommended Testing Frameworks
-
-**Decision**:
-- **FastAPI (Backend)**:
-    - **Unit/Integration Tests**: `pytest` with `httpx` for API testing and `pytest-asyncio` for asynchronous tests. `SQLAlchemy`'s test utilities for database interaction testing.
-    - **Mocks**: `unittest.mock` for isolating components during testing.
-- **Docusaurus (Frontend)**:
-    - **Unit Tests (React Components)**: `Jest` and `React Testing Library` for testing individual React components.
-    - **End-to-End (E2E) Tests**: `Playwright` for simulating user interactions across the Docusaurus site, covering navigation, RAG chatbot interaction, and personalization features.
-
-**Rationale**: These frameworks are widely adopted, well-documented, and provide comprehensive features for robust testing across the full stack. They align with best practices for Python and JavaScript ecosystems.
+No "NEEDS CLARIFICATION" items were identified in the `plan.md`'s Technical Context section, indicating a well-defined initial specification and plan. All core technology choices and architectural considerations are documented and understood.

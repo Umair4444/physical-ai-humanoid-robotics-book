@@ -37,6 +37,11 @@ The book is intended for students, researchers, hobbyists, and professionals in 
 - Q: How should the system behave if the BetterAuth service is temporarily unavailable? → A: Graceful Degradation
 - Q: Please provide the list of authors and the URL for the GitHub repository to complete the frontmatter. → A: Authors: ["The Ummah","Gemini"], Repo: https://github.com/The-Ummah/physical-ai-humanoid-robotics-book
 - Q: How should the user's background influence their experience? → A: Analytics Only
+- Q: What specific attributes beyond user ID, background, and personalization preferences should the `User Profile` entity contain (e.g., username, registration date, last login)? → A: Full Name, Email, Registration Date, Last Login Date, Background, Personalization Preferences (e.g., translation language)
+- Q: What are the expected peak concurrent users or daily active users for the Docusaurus book and RAG chatbot? → A: 1000 daily active users, 100 concurrent users
+- Q: How should the system handle failures or unavailability of critical external services like OpenAI or Qdrant? → A: Implement retry mechanisms with exponential backoff and circuit breakers.
+- Q: What specific types of metrics (e.g., latency, error rates, usage) and logging levels are required for monitoring the application and its external integrations? → A: Detailed application metrics (latency, error rates, throughput, resource utilization), structured logging (INFO, WARN, ERROR, DEBUG), and distributed tracing for all external integrations.
+- Q: What are the specific user-facing error messages or fallback behaviors for common failure scenarios across the Docusaurus frontend and chatbot? → A: Display clear, user-friendly error messages with guidance, provide fallback content for unavailable sections, and allow retries for transient issues.
 
 ## 2. Book Structure: Modules & Chapters
 
@@ -104,10 +109,11 @@ As a user, I want to sign up and sign in to personalize my experience, such as e
 2. **Given** I am a signed-in user, **When** I click the "Urdu" translation button, **Then** the site's UI and content are translated.
 
 ### Edge Cases
+- **General Error Handling**: The system MUST display clear, user-friendly error messages with guidance, provide fallback content for unavailable sections, and allow retries for transient issues.
 - **Chatbot**: What does the chatbot do if asked a question completely unrelated to the book's content? (Expected: It should politely decline to answer).
 - **Chatbot**: How does the system handle extremely long selected text for the "selected-text only" mode? (Expected: It should handle it gracefully, possibly by truncating or returning a warning).
 - **Authentication**: What happens if a user tries to sign up with an email that is already registered? (Expected: A clear error message is shown).
-- **Authentication**: If the BetterAuth service is unavailable, the system MUST display a clear message to the user and allow access to all public book content.
+- **Authentication**: If the Auth0 service is unavailable, the system MUST display a clear message to the user and allow access to all public book content.
 - **Content**: How are empty or incomplete chapters displayed? (Expected: They should display a "Content Coming Soon" message).
 
 ### Assumptions
@@ -148,9 +154,23 @@ As a user, I want to sign up and sign in to personalize my experience, such as e
 - All new features or significant changes MUST be introduced via Pull Requests from feature branches.
 - The repository MUST use semantic versioning.
 
+## 4.1. Non-Functional Requirements
+
+### NFR-001: Scalability
+- The system MUST support up to 1000 daily active users.
+- The system MUST support up to 100 concurrent users.
+
+### NFR-002: Reliability
+- The system MUST implement retry mechanisms with exponential backoff and circuit breakers for critical external services (e.g., OpenAI, Qdrant).
+
+### NFR-003: Observability
+- The system MUST provide detailed application metrics (latency, error rates, throughput, resource utilization).
+- The system MUST implement structured logging (INFO, WARN, ERROR, DEBUG).
+- The system MUST support distributed tracing for all external integrations.
+
 ## 5. Key Entities
 
-- **User Profile**: Represents a registered user. Contains user ID, background information, and personalization preferences (e.g., translation).
+- **User Profile**: Represents a registered user. Contains Full Name, Email, Registration Date, Last Login Date, Background, and Personalization Preferences (e.g., translation language).
 - **RAG Log**: Records a user's query and the chatbot's response. Linked to a User Profile if the user is signed in.
 - **Chapter Vector**: A vector representation of a chunk of text from a chapter, stored in Qdrant for semantic search.
 

@@ -1,15 +1,11 @@
 openapi: 3.0.0
 info:
-  title: Authentication API
+  title: Authentication and User Management API
   version: 1.0.0
-  description: API for user authentication via Auth0.
-servers:
-  - url: /api/v1
 paths:
   /auth/signup:
     post:
       summary: Register a new user
-      operationId: signupUser
       requestBody:
         required: true
         content:
@@ -19,42 +15,42 @@ paths:
               required:
                 - email
                 - password
-                - background_sw
-                - background_hw
+                - background
               properties:
                 email:
                   type: string
                   format: email
-                  description: User's email address
+                  example: user@example.com
                 password:
                   type: string
                   format: password
-                  description: User's chosen password
-                background_sw:
+                  example: secure_password
+                background:
                   type: string
-                  description: User's software background (e.g., "Student", "Professional")
-                background_hw:
-                  type: string
-                  description: User's hardware background (e.g., "Student", "Professional")
+                  description: User's background (e.g., student, professional)
+                  example: student
       responses:
-        '200':
-          description: User registered successfully
+        '201':
+          description: User successfully registered
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  message:
+                    type: string
+                    example: User created successfully
                   user_id:
                     type: string
                     format: uuid
-                  message:
-                    type: string
         '400':
-          description: Invalid input or email already registered
+          description: Bad Request (e.g., email already registered)
+        '500':
+          description: Internal Server Error
+
   /auth/signin:
     post:
-      summary: Authenticate an existing user
-      operationId: signinUser
+      summary: Authenticate and sign in a user
       requestBody:
         required: true
         content:
@@ -68,14 +64,14 @@ paths:
                 email:
                   type: string
                   format: email
-                  description: User's email address
+                  example: user@example.com
                 password:
                   type: string
                   format: password
-                  description: User's password
+                  example: secure_password
       responses:
         '200':
-          description: User authenticated successfully
+          description: User successfully signed in
           content:
             application/json:
               schema:
@@ -83,17 +79,112 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    description: JWT access token
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                   token_type:
                     type: string
                     example: bearer
         '401':
-          description: Invalid credentials
-security:
-  - bearerAuth: []
+          description: Unauthorized (e.g., invalid credentials)
+        '500':
+          description: Internal Server Error
+
+  /users/me:
+    get:
+      summary: Get current user's profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+    put:
+      summary: Update current user's profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: Bad Request (e.g., invalid input)
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        auth_provider_id:
+          type: string
+          readOnly: true
+        full_name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        registration_date:
+          type: string
+          format: date-time
+          readOnly: true
+        last_login_date:
+          type: string
+          format: date-time
+          readOnly: true
+        profile_data:
+          type: object
+          properties:
+            background_sw:
+              type: string
+            background_hw:
+              type: string
+            preferences:
+              type: object
+              additionalProperties: true
+    UserProfileUpdate:
+      type: object
+      properties:
+        full_name:
+          type: string
+          nullable: true
+        profile_data:
+          type: object
+          properties:
+            background_sw:
+              type: string
+            background_hw:
+              type: string
+            preferences:
+              type: object
+              additionalProperties: true

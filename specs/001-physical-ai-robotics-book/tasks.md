@@ -1,13 +1,14 @@
 ---
-description: "Task list for feature implementation"
+
+description: "Task list for Physical AI & Humanoid Robotics Book feature implementation"
 ---
 
 # Tasks: Physical AI & Humanoid Robotics Book
 
 **Input**: Design documents from `/specs/001-physical-ai-robotics-book/`
-**Prerequisites**: plan.md (required), spec.md (required for user stories)
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+**Tests**: Test tasks are not explicitly requested, therefore they are omitted.
 
 ## Format: `[ID] [P?] [Story] Description`
 
@@ -17,33 +18,39 @@ description: "Task list for feature implementation"
 
 ## Path Conventions
 
-- **Frontend**: `frontend/`
-- **Backend**: `backend/`
-- **Scripts**: `scripts/`
+- **Web app**: `backend/src/`, `frontend/src/`
 
-## Phase 1: Setup (Shared Infrastructure)
+## Phase 1: Setup (Project Initialization)
 
-**Purpose**: Project initialization and basic structure.
+**Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize the monorepo structure with `frontend`, `backend`, and `scripts` directories.
-- [ ] T002 Create top-level `.gitignore` configured for Node.js and Python projects.
-- [ ] T003 [P] Initialize a Python project with `uv` in the `backend` directory and add FastAPI.
-- [ ] T004 [P] Initialize a Node.js project in the `frontend` directory.
-- [ ] T005 [P] Create the CI/CD workflow file in `.github/workflows/ci.yml` to lint and test both frontend and backend.
-- [ ] T006 [P] Create the deployment workflow file in `.github/workflows/deploy.yml` for Vercel.
+- [ ] T001 Create project directories: `backend/`, `frontend/`
+- [ ] T002 Initialize Docusaurus project in `frontend/`
+- [ ] T003 Initialize FastAPI project in `backend/`
+- [ ] T004 Setup Python virtual environment and install dependencies for backend (`uv`) in `backend/`
+- [ ] T005 Setup Node.js dependencies for frontend (`npm`) in `frontend/`
+- [ ] T006 Configure basic `backend/src/` and `frontend/src/` structures.
+- [ ] T007 Configure `.gitignore` for frontend and backend in repository root
+- [ ] T008 Create `pyproject.toml` for backend with project metadata and dependencies in `backend/`
+- [ ] T009 Create `requirements.txt` for backend in `backend/`
+- [ ] T010 Configure `package.json` scripts for frontend (e.g., `start`, `build`) in `frontend/package.json`
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented.
+**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-- [ ] T007 Install Docusaurus in the `frontend` directory.
-- [ ] T008 Configure the basic site settings in `frontend/docusaurus.config.js`.
-- [ ] T009 Create the initial module folder structure in `frontend/docs/`.
-- [ ] T010 [P] Set up the Neon Postgres database and add connection secrets.
-- [ ] T011 [P] Set up the Qdrant vector store and add connection secrets.
-- [ ] T012 Implement database connection logic in `backend/db/session.py`.
+**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+
+- [ ] T011 Implement environment variable loading in `backend/src/config.py`
+- [ ] T012 Setup Alembic for database migrations in `backend/`
+- [ ] T013 Initialize Neon Postgres connection in `backend/src/database.py`
+- [ ] T014 Configure Qdrant client in `backend/src/vector_db.py`
+- [ ] T015 Implement base FastAPI application with CORS and basic error handling in `backend/src/main.py`
+- [ ] T016 Setup basic structured logging in `backend/src/utils/logger.py`
+
+**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
 ---
 
@@ -51,70 +58,76 @@ description: "Task list for feature implementation"
 
 **Goal**: As a reader, I want to navigate through the book's chapters, read the content, and view the images, so that I can learn about humanoid robotics.
 
-**Independent Test**: Given I am on the book's homepage, when I click on "Module 1" and then "Chapter 1.1", the chapter content is displayed correctly with text and images.
+**Independent Test**: Navigate to each chapter and verify content and images are displayed correctly.
 
 ### Implementation for User Story 1
 
-- [ ] T013 [P] [US1] Create placeholder Markdown files for all 25 chapters within the `frontend/docs/` subdirectories.
-- [ ] T014 [P] [US1] Add placeholder images for Module 1, Chapter 1 to `frontend/static/img/`.
-- [ ] T015 [US1] Populate the content for `frontend/docs/module-1/chapter-1-1.md` using the specified chapter template.
-- [ ] T016 [US1] Configure the sidebar navigation for all modules and chapters in `frontend/sidebars.js`.
+- [ ] T017 [P] [US1] Update Docusaurus config `docusaurus.config.ts` for book structure and sidebar in `frontend/docusaurus.config.ts`
+- [ ] T018 [US1] Create markdown files for Module 1, Chapters 1.1-1.5 in `frontend/docs/module-1/`
+- [ ] T019 [US1] Create markdown files for Module 2, Chapters 2.1-2.5 in `frontend/docs/module-2/`
+- [ ] T020 [US1] Create markdown files for Module 3, Chapters 3.1-3.5 in `frontend/docs/module-3/`
+- [ ] T021 [US1] Create markdown files for Module 4, Chapters 4.1-4.5 in `frontend/docs/module-4/`
+- [ ] T022 [US1] Create markdown files for Module 5, Chapters 5.1-5.5 in `frontend/docs/module-5/`
+- [ ] T023 [P] [US1] Add placeholder content and images as per `spec.md` template for all chapters in their respective markdown files.
 
-**Checkpoint**: At this point, User Story 1 should be fully functional. The book structure is navigable, and at least one chapter renders correctly.
-
----
-
-## Phase 4: User Story 3 - Personalize My Experience (Priority: P3)
-
-**Goal**: As a user, I want to sign up and sign in to personalize my experience, such as enabling Urdu translation.
-
-**Independent Test**: Given I am a new user, when I use the "Sign Up" form, my user profile is created. Given I am a registered user, when I sign in, I see a "Profile" button.
-
-### Implementation for User Story 3
-
-- [ ] T017 [P] [US3] Define the `User` Pydantic model in `backend/models/user.py`.
-- [ ] T018 [P] [US3] Define the `users` table schema in `backend/db/schemas.py`.
-- [ ] T019 [US3] Implement the `/auth/signup` and `/auth/signin` endpoints in `backend/auth/routes.py`.
-- [ ] T020 [US3] Implement the `/auth/profile` GET and PUT endpoints in `backend/auth/routes.py`.
-- [ ] T021 [P] [US3] Create the `AuthContext` provider in `frontend/src/contexts/AuthContext.js`.
-- [ ] T022 [US3] Create the Sign-up and Sign-in form components in `frontend/src/components/auth/`.
-- [ ] T023 [US3] "Swizzle" the Docusaurus `Navbar` to add authentication buttons in `frontend/src/theme/Navbar.js`.
-- [ ] T024 [US3] Implement the Urdu translation toggle component and integrate with user preferences.
-
-**Checkpoint**: At this point, User Story 3 should be functional. Users can create accounts, log in, and see personalization options.
+**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
 ---
 
-## Phase 5: User Story 2 - Ask the RAG Chatbot (Priority: P2)
+## Phase 4: User Story 2 - Ask the RAG Chatbot (Priority: P2)
 
 **Goal**: As a reader, I want to ask the chatbot a question and get an answer derived from the book's content, so that I can quickly clarify concepts.
 
-**Independent Test**: Given the chatbot UI is open, when I ask "What is SLAM?", I receive a concise answer with a source link to the relevant chapter.
+**Independent Test**: Ask the chatbot various in-domain questions and verify accurate answers with source links, and test "selected-text only" mode.
 
 ### Implementation for User Story 2
 
-- [ ] T025 [P] [US2] Install OpenAI and Qdrant client libraries in `backend/`.
-- [ ] T026 [P] [US2] Define the `chat_logs` table schema in `backend/db/schemas.py`.
-- [ ] T027 [US2] Create the vector ingestion script in `scripts/ingest_vectors.py` to process and store chapter content in Qdrant.
-- [ ] T028 [US2] Implement the core RAG service in `backend/rag/service.py` to query Qdrant and generate answers with the OpenAI SDK.
-- [ ] T029 [US2] Implement the `/rag/chat` endpoint in `backend/rag/routes.py`.
-- [ ] T030 [P] [US2] Design and create the Chatbot UI component in `frontend/src/components/chatbot/Chatbot.js`.
-- [ ] T031 [US2] Implement the client-side logic to call the `/rag/chat` endpoint from the chatbot UI.
-- [ ] T032 [US2] Integrate the Chatbot component into the Docusaurus layout as a floating action button.
+- [ ] T024 [P] [US2] Implement `ChapterVector` model for Qdrant in `backend/src/models/chapter_vector.py`
+- [ ] T025 [US2] Implement `RAGLog` model in `backend/src/models/rag_log.py`
+- [ ] T026 [P] [US2] Create `rag_service.py` for OpenAI Agent SDK integration in `backend/src/services/rag_service.py`
+- [ ] T027 [P] [US2] Implement content vectorization logic in `backend/src/services/vectorization_service.py`
+- [ ] T028 [US2] Implement `POST /rag/query` endpoint in `backend/src/api/rag.py`
+- [ ] T029 [P] [US2] Develop basic Docusaurus Chatbot UI component in `frontend/src/components/Chatbot.tsx`
+- [ ] T030 [US2] Connect frontend Chatbot UI to backend `/rag/query` endpoint
+- [ ] T031 [US2] Implement "selected-text only" mode logic in frontend and backend
+- [ ] T032 [P] [US2] Implement daily update mechanism for RAG knowledge base (e.g., a background job/cron)
 
-**Checkpoint**: All user stories should now be independently functional.
+**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 5: User Story 3 - Personalize My Experience (Priority: P3)
 
-**Purpose**: Improvements that affect multiple user stories.
+**Goal**: As a user, I want to sign up and sign in to personalize my experience, such as enabling Urdu translation.
 
-- [ ] T033 [P] Create `vercel.json` file and configure for monorepo deployment.
-- [ ] T034 [P] Create `.env.example` files for both `frontend` and `backend` to document required variables.
-- [ ] T035 Write end-to-end tests covering the main user flows (reading, signing in, asking a question).
-- [ ] T036 Perform final QA, code cleanup, and documentation review.
-- [ ] T037 Tag the `v1.0.0` release and merge to `main`.
+**Independent Test**: Register a new user, sign in, update profile, and verify translation toggle functionality.
+
+### Implementation for User Story 3
+
+- [ ] T033 [P] [US3] Implement `UserProfile` model in `backend/src/models/user_profile.py`
+- [ ] T034 [P] [US3] Create `auth_service.py` for BetterAuth integration in `backend/src/services/auth_service.py`
+- [ ] T035 [P] [US3] Implement `POST /auth/signup` endpoint in `backend/src/api/auth.py`
+- [ ] T036 [P] [US3] Implement `POST /auth/signin` endpoint in `backend/src/api/auth.py`
+- [ ] T037 [P] [US3] Implement `GET /users/me` endpoint in `backend/src/api/users.py`
+- [ ] T038 [P] [US3] Implement `PUT /users/me` endpoint in `backend/src/api/users.py`
+- [ ] T039 [P] [US3] Develop Docusaurus SignUp/SignIn UI components in `frontend/src/components/Auth.tsx`
+- [ ] T040 [P] [US3] Create user profile page (`frontend/src/pages/profile.tsx`) with personalization options
+- [ ] T041 [P] [US3] Implement UI for Urdu translation toggle and apply translation via Docusaurus i18n
+
+**Checkpoint**: All user stories should now be independently functional
+
+---
+
+## Final Phase: Polish & Cross-Cutting Concerns
+
+**Purpose**: Improvements that affect multiple user stories
+
+- [ ] T042 Implement retry mechanisms with exponential backoff and circuit breakers in `backend/src/utils/resilience.py`
+- [ ] T043 Refine logging and metrics integration across backend services
+- [ ] T044 Implement user-friendly error messages and fallback content in both frontend and backend
+- [ ] T045 Configure Vercel deployment for frontend and backend (includes `vercel.json` and build scripts)
+- [ ] T046 Document build commands and environment variables in `README.md`
+- [ ] T047 Setup pre-commit hooks for Conventional Commits
 
 ---
 
@@ -122,32 +135,47 @@ description: "Task list for feature implementation"
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: Can start immediately.
-- **Foundational (Phase 2)**: Depends on Setup completion. BLOCKS all user stories.
-- **User Stories (Phase 3-5)**: All depend on Foundational phase completion.
-- **Polish (Phase 6)**: Depends on all desired user stories being complete.
+- **Setup (Phase 1)**: No dependencies - can start immediately
+- **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
+- **User Stories (Phase 3+)**: All depend on Foundational phase completion
+  - User stories can then proceed in parallel (if staffed)
+  - Or sequentially in priority order (P1 → P2 → P3)
+- **Polish (Final Phase)**: Depends on all desired user stories being complete
 
 ### User Story Dependencies
 
-- **User Story 1 (P1)**: Can start after Foundational. No dependencies on other stories.
-- **User Story 3 (P3)**: Can start after Foundational. No dependencies on other stories.
-- **User Story 2 (P2)**: Depends on US1 for content to be available. The ingestion script needs the chapter files.
+- **User Story 1 (P1)**: Can start after Foundational (Phase 2) - No dependencies on other stories
+- **User Story 2 (P2)**: Can start after Foundational (Phase 2) - May integrate with US1 but should be independently testable
+- **User Story 3 (P3)**: Can start after Foundational (Phase 2) - May integrate with US1/US2 but should be independently testable
+
+### Within Each User Story
+
+- Models before services
+- Services before endpoints
+- Core implementation before integration
+- Story complete before moving to next priority
 
 ### Parallel Opportunities
 
-- Once Phase 2 is complete, work on US1 and US3 can happen in parallel.
-- The backend and frontend work within a single user story can often be parallelized (e.g., T017-T020 can be done while T021-T024 are in progress).
+- All Setup tasks marked [P] can run in parallel
+- All Foundational tasks marked [P] can run in parallel (within Phase 2)
+- Once Foundational phase completes, all user stories can start in parallel (if team capacity allows)
+- All models, services, or UI components for a user story marked [P] can run in parallel
+- Different user stories can be worked on in parallel by different team members
 
 ---
 
-## Parallel Example: User Story 3
+## Parallel Example: User Story 1
 
 ```bash
-# Backend team can work on the auth API
-Task: "Implement the /auth/signup and /auth/signin endpoints in backend/auth/routes.py"
-
-# Frontend team can simultaneously work on the UI components
-Task: "Create the Sign-up and Sign-in form components in frontend/src/components/auth/"
+# Update Docusaurus config and create chapter markdown files:
+Task: "T017 [P] [US1] Update Docusaurus config docusaurus.config.ts for book structure and sidebar in frontend/docusaurus.config.ts"
+Task: "T018 [US1] Create markdown files for Module 1, Chapters 1.1-1.5 in frontend/docs/module-1/"
+Task: "T019 [US1] Create markdown files for Module 2, Chapters 2.1-2.5 in frontend/docs/module-2/"
+Task: "T020 [US1] Create markdown files for Module 3, Chapters 3.1-3.5 in frontend/docs/module-3/"
+Task: "T021 [US1] Create markdown files for Module 4, Chapters 4.1-4.5 in frontend/docs/module-4/"
+Task: "T022 [US1] Create markdown files for Module 5, Chapters 5.1-5.5 in frontend/docs/module-5/"
+Task: "T023 [P] [US1] Add placeholder content and images as per spec.md template for all chapters in their respective markdown files."
 ```
 
 ---
@@ -157,15 +185,37 @@ Task: "Create the Sign-up and Sign-in form components in frontend/src/components
 ### MVP First (User Story 1 Only)
 
 1. Complete Phase 1: Setup
-2. Complete Phase 2: Foundational
+2. Complete Phase 2: Foundational (CRITICAL - blocks all stories)
 3. Complete Phase 3: User Story 1
-4. **STOP and VALIDATE**: Test User Story 1 independently. The book is readable.
-5. Deploy/demo if ready.
+4. **STOP and VALIDATE**: Test User Story 1 independently
+5. Deploy/demo if ready
 
 ### Incremental Delivery
 
-1.  Complete Setup + Foundational → Foundation ready.
-2.  Add User Story 1 → Test independently → Deploy/Demo (MVP!).
-3.  Add User Story 3 → Test independently → Deploy/Demo.
-4.  Add User Story 2 → Test independently → Deploy/Demo.
-5.  Each story adds value without breaking previous stories.
+1. Complete Setup + Foundational → Foundation ready
+2. Add User Story 1 → Test independently → Deploy/Demo (MVP!)
+3. Add User Story 2 → Test independently → Deploy/Demo
+4. Add User Story 3 → Test independently → Deploy/Demo
+5. Each story adds value without breaking previous stories
+
+### Parallel Team Strategy
+
+With multiple developers:
+
+1. Team completes Setup + Foundational together
+2. Once Foundational is done:
+   - Developer A: User Story 1
+   - Developer B: User Story 2
+   - Developer C: User Story 3
+3. Stories complete and integrate independently
+
+---
+
+## Notes
+
+- [P] tasks = different files, no dependencies
+- [Story] label maps task to specific user story for traceability
+- Each user story should be independently completable and testable
+- Commit after each task or logical group
+- Stop at any checkpoint to validate story independently
+- Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
