@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot API
+  version: 1.0.0
+paths:
+  /rag/query:
+    post:
+      summary: Query the RAG chatbot
+      description: Sends a query to the RAG chatbot and receives an answer with source information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+                - mode
+              properties:
+                query:
+                  type: string
+                  description: The user's question for the chatbot.
+                  example: What is reinforcement learning for locomotion?
+                mode:
+                  type: string
+                  enum: [full-book, selected-text]
+                  description: Query mode - 'full-book' for general questions, 'selected-text' for context-specific queries.
+                  example: full-book
+      responses:
+        '200':
+          description: Successful response from the chatbot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: The chatbot's answer to the query.
+                    example: Reinforcement learning for locomotion is a technique where an agent learns to walk or run by trial and error...
+                  source:
+                    type: object
+                    properties:
+                      chapter:
+                        type: string
+                        description: The chapter title where the answer was sourced.
+                        example: 4.3: Reinforcement Learning for Locomotion
+                      url:
+                        type: string
+                        format: uri
+                        description: URL to the relevant section in the book.
+                        example: /docs/module-4/chapter-3
+        '400':
+          description: Bad Request (e.g., invalid query or mode)
+        '500':
+          description: Internal Server Error

@@ -2,8 +2,8 @@
 title: "Project Constitution for Physical AI & Humanoid Robotics"
 version: "0.1.0"
 date: "2025-12-09"
-authors: ["TODO: Define project authors/maintainers"]
-repo: "TODO: Add repository URL"
+authors: ["The Ummah","Gemini"]
+repo: "https://github.com/The-Ummah/physical-ai-humanoid-robotics-book"
 license: "MIT"
 ---
 
