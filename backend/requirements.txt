@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic-settings
+alembic
+asyncpg
+sqlalchemy[asyncio]
+qdrant-client
+python-json-logger

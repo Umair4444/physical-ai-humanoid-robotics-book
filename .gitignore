@@ -1,0 +1,37 @@
+# Python
+.Python/
+.venv/
+bin/
+include/
+lib/
+lib64/
+pyvenv.cfg
+share/
+*.pyc
+*.pyo
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.coverage
+.env
+.idea/
+
+# Python specific additions
+venv/
+*.egg-info/
+uv.lock
+
+# Node.js
+node_modules/
+build/
+dist/
+.docusaurus/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+.vscode/
+
+# Ignore .gemini folder
+.gemini/

@@ -110,6 +110,8 @@ As a user, I want to sign up and sign in to personalize my experience, such as e
 
 ### Edge Cases
 - **General Error Handling**: The system MUST display clear, user-friendly error messages with guidance, provide fallback content for unavailable sections, and allow retries for transient issues.
+  - **Definition: User-Friendly Error Messages**: Error messages should be concise, use plain language (avoiding technical jargon), explain the problem clearly (what happened), suggest actionable steps for resolution, and maintain a helpful tone. Examples: "Couldn't connect to the server. Please check your internet connection and try again." or "This email is already registered. Please try logging in or use a different email."
+  - **Definition: Fallback Content**: Placeholder content or alternative displays provided when primary content is unavailable. This includes "Content Coming Soon" messages for incomplete chapters, or a static message for a temporarily unavailable chatbot. The fallback should clearly indicate the content's status and, if possible, provide a path forward (e.g., "Try again later").
 - **Chatbot**: What does the chatbot do if asked a question completely unrelated to the book's content? (Expected: It should politely decline to answer).
 - **Chatbot**: How does the system handle extremely long selected text for the "selected-text only" mode? (Expected: It should handle it gracefully, possibly by truncating or returning a warning).
 - **Authentication**: What happens if a user tries to sign up with an email that is already registered? (Expected: A clear error message is shown).
@@ -168,6 +170,29 @@ As a user, I want to sign up and sign in to personalize my experience, such as e
 - The system MUST implement structured logging (INFO, WARN, ERROR, DEBUG).
 - The system MUST support distributed tracing for all external integrations.
 
+### NFR-004: Accessibility
+- The frontend MUST adhere to WCAG 2.1 AA accessibility standards.
+
+## 4.2. External Service Integrations Details
+
+To further clarify the expected roles and interfaces for external integrations:
+
+### OpenAI Agent SDK
+- **Role**: Core for RAG chatbot processing. Handles natural language understanding, response generation, and tool utilization for querying the book content.
+- **Key Interfaces**: Expected to provide methods for invoking the RAG tool, managing conversation context, and returning structured responses including source links.
+
+### Qdrant
+- **Role**: Dedicated vector database for efficient semantic search of vectorized book content.
+- **Key Interfaces**: Expected to provide APIs for upserting chapter vectors, performing similarity searches, and managing collections.
+
+### Neon Postgres
+- **Role**: Primary relational database for persistent storage of user profiles, RAG chatbot interaction logs, and other structured application data.
+- **Key Interfaces**: Standard SQL interface for CRUD operations on defined entities (User Profile, RAG Log).
+
+### BetterAuth (Auth0)
+- **Role**: Third-party identity provider for secure user authentication (signup, sign-in) and potentially user profile management.
+- **Key Interfaces**: Standard OAuth 2.0 / OpenID Connect flows for authentication and authorization. Provides APIs for user registration, login, token issuance, and potentially user profile updates.
+
 ## 5. Key Entities
 
 - **User Profile**: Represents a registered user. Contains Full Name, Email, Registration Date, Last Login Date, Background, and Personalization Preferences (e.g., translation language).
@@ -177,7 +202,7 @@ As a user, I want to sign up and sign in to personalize my experience, such as e
 ## 6. Success Criteria
 
 - **SC-001**: The complete book with all 5 modules and 25 chapters is published and accessible online.
-- **SC-002**: The RAG chatbot responds to 95% of in-domain queries with a relevant answer in under 3 seconds.
+- **SC-002**: The RAG chatbot responds to 95% of in-domain queries with a relevant answer in under 3 seconds. Measurement for latency will be defined as the time from sending the query to the FastAPI backend until the full response is received by the backend. "Relevant answer" will be determined by adherence to predefined answer quality metrics, and source link accuracy.
 - **SC-003**: User signup and sign-in functionality via BetterAuth is fully operational.
 - **SC-004**: The book successfully builds and deploys via the defined process on GitHub Pages or Vercel.
 
@@ -208,6 +233,11 @@ title: "[Chapter Title]"
 ```
 
 ### 7.2. Example API Payloads
+
+### 7.3. UI/UX Considerations
+- Detailed user interface (UI) and user experience (UX) specifications, including specific sizing and positioning requirements for UI elements, are managed in dedicated design artifacts. For the Docusaurus frontend, adherence to its standard themes and best practices for content presentation implicitly guides many UI/UX decisions, focusing on readability and accessibility (as per NFR-004).
+
+
 
 **BetterAuth Signup (Request)**:
 ```json

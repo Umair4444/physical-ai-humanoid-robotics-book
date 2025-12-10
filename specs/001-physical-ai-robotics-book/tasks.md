@@ -24,16 +24,16 @@ description: "Task list for Physical AI & Humanoid Robotics Book feature impleme
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project directories: `backend/`, `frontend/`
-- [ ] T002 Initialize Docusaurus project in `frontend/`
-- [ ] T003 Initialize FastAPI project in `backend/`
-- [ ] T004 Setup Python virtual environment and install dependencies for backend (`uv`) in `backend/`
-- [ ] T005 Setup Node.js dependencies for frontend (`npm`) in `frontend/`
-- [ ] T006 Configure basic `backend/src/` and `frontend/src/` structures.
-- [ ] T007 Configure `.gitignore` for frontend and backend in repository root
-- [ ] T008 Create `pyproject.toml` for backend with project metadata and dependencies in `backend/`
-- [ ] T009 Create `requirements.txt` for backend in `backend/`
-- [ ] T010 Configure `package.json` scripts for frontend (e.g., `start`, `build`) in `frontend/package.json`
+- [x] T001 Create project directories: `backend/`, `frontend/`
+- [x] T002 Initialize Docusaurus project in `frontend/`
+- [x] T003 Initialize FastAPI project in `backend/`
+- [x] T004 Setup Python virtual environment and install dependencies for backend (`uv`) in `backend/`
+- [x] T005 Setup Node.js dependencies for frontend (`npm`) in `frontend/`
+- [x] T006 Configure basic `backend/src/` and `frontend/src/` structures.
+- [x] T007 Configure `.gitignore` for frontend and backend in repository root
+- [x] T008 Create `pyproject.toml` for backend with project metadata and dependencies in `backend/`
+- [x] T009 Create `requirements.txt` for backend in `backend/`
+- [x] T010 Configure `package.json` scripts for frontend (e.g., `start`, `build`) in `frontend/package.json`
 
 ---
 
@@ -43,12 +43,12 @@ description: "Task list for Physical AI & Humanoid Robotics Book feature impleme
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T011 Implement environment variable loading in `backend/src/config.py`
-- [ ] T012 Setup Alembic for database migrations in `backend/`
-- [ ] T013 Initialize Neon Postgres connection in `backend/src/database.py`
-- [ ] T014 Configure Qdrant client in `backend/src/vector_db.py`
-- [ ] T015 Implement base FastAPI application with CORS and basic error handling in `backend/src/main.py`
-- [ ] T016 Setup basic structured logging in `backend/src/utils/logger.py`
+- [x] T011 Implement environment variable loading in `backend/src/config.py`
+- [x] T012 Setup Alembic for database migrations in `backend/`
+- [x] T013 Initialize Neon Postgres connection in `backend/src/database.py`
+- [x] T014 Configure Qdrant client in `backend/src/vector_db.py`
+- [x] T015 Implement base FastAPI application with CORS and basic error handling in `backend/src/main.py`
+- [x] T016 Setup basic structured logging in `backend/src/utils/logger.py`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -62,13 +62,13 @@ description: "Task list for Physical AI & Humanoid Robotics Book feature impleme
 
 ### Implementation for User Story 1
 
-- [ ] T017 [P] [US1] Update Docusaurus config `docusaurus.config.ts` for book structure and sidebar in `frontend/docusaurus.config.ts`
-- [ ] T018 [US1] Create markdown files for Module 1, Chapters 1.1-1.5 in `frontend/docs/module-1/`
-- [ ] T019 [US1] Create markdown files for Module 2, Chapters 2.1-2.5 in `frontend/docs/module-2/`
-- [ ] T020 [US1] Create markdown files for Module 3, Chapters 3.1-3.5 in `frontend/docs/module-3/`
-- [ ] T021 [US1] Create markdown files for Module 4, Chapters 4.1-4.5 in `frontend/docs/module-4/`
-- [ ] T022 [US1] Create markdown files for Module 5, Chapters 5.1-5.5 in `frontend/docs/module-5/`
-- [ ] T023 [P] [US1] Add placeholder content and images as per `spec.md` template for all chapters in their respective markdown files.
+- [x] T017 [P] [US1] Update Docusaurus config `docusaurus.config.ts` for book structure and sidebar in `frontend/docusaurus.config.ts`
+- [x] T018 [US1] Create markdown files for Module 1, Chapters 1.1-1.5 in `frontend/docs/module-1/`
+- [x] T019 [US1] Create markdown files for Module 2, Chapters 2.1-2.5 in `frontend/docs/module-2/`
+- [x] T020 [US1] Create markdown files for Module 3, Chapters 3.1-3.5 in `frontend/docs/module-3/`
+- [x] T021 [US1] Create markdown files for Module 4, Chapters 4.1-4.5 in `frontend/docs/module-4/`
+- [x] T022 [US1] Create markdown files for Module 5, Chapters 5.1-5.5 in `frontend/docs/module-5/`
+- [x] T023 [P] [US1] Add placeholder content and images as per `spec.md` template for all chapters in their respective markdown files.
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -82,15 +82,15 @@ description: "Task list for Physical AI & Humanoid Robotics Book feature impleme
 
 ### Implementation for User Story 2
 
-- [ ] T024 [P] [US2] Implement `ChapterVector` model for Qdrant in `backend/src/models/chapter_vector.py`
-- [ ] T025 [US2] Implement `RAGLog` model in `backend/src/models/rag_log.py`
-- [ ] T026 [P] [US2] Create `rag_service.py` for OpenAI Agent SDK integration in `backend/src/services/rag_service.py`
-- [ ] T027 [P] [US2] Implement content vectorization logic in `backend/src/services/vectorization_service.py`
-- [ ] T028 [US2] Implement `POST /rag/query` endpoint in `backend/src/api/rag.py`
-- [ ] T029 [P] [US2] Develop basic Docusaurus Chatbot UI component in `frontend/src/components/Chatbot.tsx`
-- [ ] T030 [US2] Connect frontend Chatbot UI to backend `/rag/query` endpoint
-- [ ] T031 [US2] Implement "selected-text only" mode logic in frontend and backend
-- [ ] T032 [P] [US2] Implement daily update mechanism for RAG knowledge base (e.g., a background job/cron)
+- [x] T024 [P] [US2] Implement `ChapterVector` model for Qdrant in `backend/src/models/chapter_vector.py`
+- [x] T025 [US2] Implement `RAGLog` model in `backend/src/models/rag_log.py`
+- [x] T026 [P] [US2] Create `rag_service.py` for OpenAI Agent SDK integration in `backend/src/services/rag_service.py`
+- [x] T027 [P] [US2] Implement content vectorization logic in `backend/src/services/vectorization_service.py`
+- [x] T028 [US2] Implement `POST /rag/query` endpoint in `backend/src/api/rag.py`
+- [x] T029 [P] [US2] Develop basic Docusaurus Chatbot UI component in `frontend/src/components/Chatbot.tsx`
+- [x] T030 [US2] Connect frontend Chatbot UI to backend `/rag/query` endpoint
+- [x] T031 [US2] Implement "selected-text only" mode logic in frontend and backend
+- [x] T032 [P] [US2] Implement daily update mechanism for RAG knowledge base (e.g., a background job/cron)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
