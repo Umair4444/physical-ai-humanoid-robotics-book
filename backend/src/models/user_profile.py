@@ -25,3 +25,9 @@ class UserProfileCreate(BaseModel): # Changed from UserProfileBase
     password: str
     full_name: Optional[str] = None
     profile_data: Optional[Dict[str, Any]] = None
+
+
+class UserProfileUpdate(BaseModel):
+    full_name: Optional[str] = None
+    profile_data: Optional[Dict[str, Any]] = None
+

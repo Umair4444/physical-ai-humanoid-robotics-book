@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta
 
-from backend.src.database import get_session
+from backend.src.database import get_db as get_session
 from backend.src.services.auth_service import AuthService, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from backend.src.models.user_profile import UserProfileCreate, UserProfile
 from backend.src.config import settings

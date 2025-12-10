@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Dict, Any
 
-from backend.src.database import get_session
+from backend.src.database import get_db as get_session
 from backend.src.models.user_profile import UserProfile, UserProfileUpdate
 from backend.src.services.auth_service import get_current_active_user # Assuming this function exists or will be created
 
