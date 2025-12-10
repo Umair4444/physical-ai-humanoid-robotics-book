@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Any, List
-from backend.src.models.chapter_vector import ChapterVector
-from backend.src.models.rag_log import RAGLog, RAGQueryMode
+from ..models.chapter_vector import ChapterVector
+from ..models.rag_log import RAGLog, RAGQueryMode
 
 class RAGService:
     """

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.src.api.rag import router as rag_router # Import the rag router
-from backend.src.api.auth import auth_router # Import the auth router
-from backend.src.api.users import users_router # Import the users router
+from .api.rag import router as rag_router # Import the rag router
+from .api.auth import auth_router # Import the auth router
+from .api.users import users_router # Import the users router
 
 app = FastAPI(
     title="Physical AI & Humanoid Robotics Book Backend",

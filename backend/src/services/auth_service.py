@@ -6,9 +6,9 @@ from sqlmodel import Session, select
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from backend.src.models.user_profile import UserProfile, UserProfileCreate
-from backend.src.config import settings
-from backend.src.database import get_db as get_session
+from ..models.user_profile import UserProfile, UserProfileCreate
+from ..config import settings
+from ..database import get_db as get_session
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

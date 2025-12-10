@@ -3,8 +3,8 @@ from typing import Dict, Any, Optional
 from uuid import UUID
 from pydantic import BaseModel
 
-from backend.src.services.rag_service import RAGService
-from backend.src.models.rag_log import RAGQueryMode
+from ..services.rag_service import RAGService
+from ..models.rag_log import RAGQueryMode
 
 router = APIRouter()
 
