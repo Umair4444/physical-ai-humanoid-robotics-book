@@ -104,15 +104,15 @@ description: "Task list for Physical AI & Humanoid Robotics Book feature impleme
 
 ### Implementation for User Story 3
 
-- [ ] T033 [P] [US3] Implement `UserProfile` model in `backend/src/models/user_profile.py`
-- [ ] T034 [P] [US3] Create `auth_service.py` for BetterAuth integration in `backend/src/services/auth_service.py`
-- [ ] T035 [P] [US3] Implement `POST /auth/signup` endpoint in `backend/src/api/auth.py`
-- [ ] T036 [P] [US3] Implement `POST /auth/signin` endpoint in `backend/src/api/auth.py`
-- [ ] T037 [P] [US3] Implement `GET /users/me` endpoint in `backend/src/api/users.py`
-- [ ] T038 [P] [US3] Implement `PUT /users/me` endpoint in `backend/src/api/users.py`
-- [ ] T039 [P] [US3] Develop Docusaurus SignUp/SignIn UI components in `frontend/src/components/Auth.tsx`
-- [ ] T040 [P] [US3] Create user profile page (`frontend/src/pages/profile.tsx`) with personalization options
-- [ ] T041 [P] [US3] Implement UI for Urdu translation toggle and apply translation via Docusaurus i18n
+- [x] T033 [P] [US3] Implement `UserProfile` model in `backend/src/models/user_profile.py`
+- [x] T034 [P] [US3] Create `auth_service.py` for BetterAuth integration in `backend/src/services/auth_service.py`
+- [x] T035 [P] [US3] Implement `POST /auth/signup` endpoint in `backend/src/api/auth.py`
+- [x] T036 [P] [US3] Implement `POST /auth/signin` endpoint in `backend/src/api/auth.py`
+- [x] T037 [P] [US3] Implement `GET /users/me` endpoint in `backend/src/api/users.py`
+- [x] T038 [P] [US3] Implement `PUT /users/me` endpoint in `backend/src/api/users.py`
+- [x] T039 [P] [US3] Develop Docusaurus SignUp/SignIn UI components in `frontend/src/components/Auth.tsx`
+- [x] T040 [P] [US3] Create user profile page (`frontend/src/pages/profile.tsx`) with personalization options
+- [x] T041 [P] [US3] Implement UI for Urdu translation toggle and apply translation via Docusaurus i18n
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -122,12 +122,12 @@ description: "Task list for Physical AI & Humanoid Robotics Book feature impleme
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T042 Implement retry mechanisms with exponential backoff and circuit breakers in `backend/src/utils/resilience.py`
-- [ ] T043 Refine logging and metrics integration across backend services
-- [ ] T044 Implement user-friendly error messages and fallback content in both frontend and backend
-- [ ] T045 Configure Vercel deployment for frontend and backend (includes `vercel.json` and build scripts)
-- [ ] T046 Document build commands and environment variables in `README.md`
-- [ ] T047 Setup pre-commit hooks for Conventional Commits
+- [x] T042 Implement retry mechanisms with exponential backoff and circuit breakers in `backend/src/utils/resilience.py`
+- [x] T043 Refine logging and metrics integration across backend services
+- [x] T044 Implement user-friendly error messages and fallback content in both frontend and backend
+- [x] T045 Configure Vercel deployment for frontend and backend (includes `vercel.json` and build scripts)
+- [x] T046 Document build commands and environment variables in `README.md`
+- [x] T047 Setup pre-commit hooks for Conventional Commits
 
 ---
 

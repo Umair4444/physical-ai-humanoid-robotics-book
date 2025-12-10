@@ -10,4 +10,7 @@ class Settings(BaseSettings):
     BETTERAUTH_CLIENT_SECRET: str
     BETTERAUTH_DOMAIN: str
 
+    SECRET_KEY: str = "super-secret-key" # TODO: Generate a strong, random key in production
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
 settings = Settings()

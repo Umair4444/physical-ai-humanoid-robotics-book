@@ -15,3 +15,12 @@ def setup_logger():
     return logger
 
 logger = setup_logger()
+
+# Placeholder for metrics
+def metric_counter(name: str, value: int = 1, tags: dict = None):
+    tags_str = " ".join([f"{k}={v}" for k, v in tags.items()]) if tags else ""
+    logger.info(f"metric_counter: {name}={value} {tags_str}")
+
+def metric_gauge(name: str, value: float, tags: dict = None):
+    tags_str = " ".join([f"{k}={v}" for k, v in tags.items()]) if tags else ""
+    logger.info(f"metric_gauge: {name}={value} {tags_str}")
